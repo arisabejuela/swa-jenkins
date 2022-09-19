@@ -1,4 +1,4 @@
-FROM cypress/base:l0.18.0 
+FROM cypress/base:16.13.0
 
 RUN mkdir /app
 WORKDIR /app
