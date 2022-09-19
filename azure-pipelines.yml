@@ -32,7 +32,7 @@ stages:
     jobs:
       - job: Build
         pool:
-          vmImage: windows-latest
+          vmImage: ubuntu-latest
         condition: eq(variables.isMain, 'true')
         workspace:
           clean: all
