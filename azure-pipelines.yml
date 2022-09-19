@@ -34,7 +34,6 @@ stages:
         pool:
           vmImage: ubuntu-latest
         condition: eq(variables.isMain, 'true')
-        dependsOn: SemanticVersioning
         workspace:
           clean: all
         steps:
