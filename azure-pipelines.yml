@@ -1,0 +1,50 @@
+# DNP Frontend Service Pipeline
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+      - release/*
+    exclude:
+      - bugfix/infra*
+      - feature/infra*
+
+resources:
+  repositories:
+    - repository: dnp-infra_common-pipeline
+      type: git
+      name: dnp-infra_common-pipeline
+
+variables:
+  - group: dnp-ui-release
+  - name: isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - name: isRelease
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release')]
+  - name: branchName
+    value: $[replace(variables['Build.SourceBranchName'], 'refs/heads/', '')]
+
+stages:
+  - stage: Init
+    displayName: 'Initialize'
+    jobs:
+      - job: Build
+        pool:
+          vmImage: ubuntu-latest
+        condition: eq(variables.isMain, 'true')
+        dependsOn: SemanticVersioning
+        workspace:
+          clean: all
+        steps:
+          - checkout: self
+            submodules: true
+          - task: NodeTool@0
+            displayName: 'Install Node.js 10.x'
+            inputs:
+              versionSpec: '10.x'
+          - script: 'npm ci && npm run build'
+            displayName: 'Build BizOps web app with Dev Specifications'
+          - script: 'npm run e2e'
+            displayName: 'Cypress Automated Test'
