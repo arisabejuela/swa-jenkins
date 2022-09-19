@@ -39,9 +39,13 @@ stages:
         steps:
           - checkout: self
             submodules: true
-          - task: NodeTool@0
-            displayName: 'Install Node.js 10.x'
-            inputs:
-              versionSpec: '10.x'
-          - script: 'npm run cypress:run'
-            displayName: 'Cypress Automated Test'
+          # - task: NodeTool@0
+          #   displayName: 'Install Node.js 10.x'
+          #   inputs:
+          #     versionSpec: '10.x'
+          # - script: 'npm run cypress:run'
+          #   displayName: 'Cypress Automated Test'
+          - script: |
+              docker build -t cypress .
+            displayName: 'Build container image'
+            retryCountOnTaskFailure: 1
