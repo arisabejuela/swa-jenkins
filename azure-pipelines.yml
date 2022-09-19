@@ -20,7 +20,7 @@ resources:
 variables:
   - group: dnp-ui-release
   - name: isMain
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   - name: isRelease
     value: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release')]
   - name: branchName
